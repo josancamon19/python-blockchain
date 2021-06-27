@@ -20,7 +20,7 @@ def sign(message: str, private):
     :return:
     """
     signature = private.sign(
-        bytes(message, 'utf-8'),
+        bytes(str(message), 'utf-8'),
         padding.PSS(mgf=padding.MGF1(hashes.SHA256()), salt_length=padding.PSS.MAX_LENGTH),
         hashes.SHA256()
     )
@@ -41,7 +41,7 @@ def verify(message: str, signature: str, public) -> bool:
     try:
         public.verify(
             signature,
-            bytes(message, 'utf-8'),
+            bytes(str(message), 'utf-8'),
             padding.PSS(mgf=padding.MGF1(hashes.SHA256()), salt_length=padding.PSS.MAX_LENGTH),
             hashes.SHA256()
         )
