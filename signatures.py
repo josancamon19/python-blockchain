@@ -30,7 +30,9 @@ def sign(message: str, private):
 def verify(message: str, signature: str, public) -> bool:
     """
     A private key can be used to sign a message.
-    This allows anyone with the public key to verify that the message was created by someone who possesses the corresponding private key.
+    This allows anyone with the public key to verify that the message was
+    created by someone who possesses the corresponding private key.
+    
     :param message: bytes str message
     :param signature: signed_message
     :param public: public key
