@@ -1,6 +1,7 @@
 from cryptography.hazmat.primitives.asymmetric import rsa, padding
 from cryptography.hazmat.primitives import hashes
 from cryptography.exceptions import InvalidSignature
+from cryptography.hazmat.primitives import serialization
 
 
 def generate_keys():
@@ -50,6 +51,15 @@ def verify(message: str, signature: str, public) -> bool:
         return False
     except Exception as e:
         return False
+
+
+def get_serialized_key(key):
+    if isinstance(key, rsa.RSAPublicKey):
+        return key.public_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PublicFormat.SubjectPublicKeyInfo, )
+    
+    return key.private_bytes(encoding=serialization.Encoding.PEM, format=serialization.PrivateFormat.PKCS8)
 
 
 if __name__ == '__main__':

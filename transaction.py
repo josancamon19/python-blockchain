@@ -73,6 +73,13 @@ class Transaction:
     
     def __gather(self):
         return [self.inputs, self.outputs, self.required_signatures]
+    
+    def to_pickle(self):
+        pass
+    
+    @staticmethod
+    def from_pickle():
+        pass
 
 
 def get_4_key_pairs():

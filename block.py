@@ -32,6 +32,11 @@ class Block:
         digest.update(self.previous_hash)
         return digest.finalize()
     
+    def is_valid(self):
+        if not self.previous_block:
+            return True
+        return self.previous_block.compute_hash() == self.previous_hash
+    
     def detect_tampering(self):
         """
         Detect tampering in the block chain from the block selected up to root
@@ -43,7 +48,7 @@ class Block:
                 print('Blockchain without tampering detected...')
                 break
             
-            if block.previous_block.compute_hash() == block.previous_hash:
+            if block.is_valid():
                 block = block.previous_block
             else:
                 print('Tampering detected on block',
@@ -58,4 +63,3 @@ if __name__ == '__main__':
     block3 = Block('333', block2)
     
     block3.detect_tampering()
- 
