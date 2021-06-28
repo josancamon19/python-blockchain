@@ -7,9 +7,18 @@ class TransactionsBlock(Block):
         super().__init__([], previous_block)
     
     def add_transaction(self, transaction):
+        """
+        Block data is a list of transactions in this case, remember in our Block, data can be anything
+        :param transaction: Transaction object
+        """
         self.data.append(transaction)
     
     def is_valid(self):
+        """
+        - Block is_valid operation
+        - Transaction is_valid_operation
+        :return: boolean depending on 2 conditions mentioned above
+        """
         if not super(TransactionsBlock, self).is_valid():
             return False
         
@@ -21,6 +30,9 @@ class TransactionsBlock(Block):
 
 
 def get_new_transaction() -> Transaction:
+    """
+    :return: Simple default transaction object
+    """
     transaction = Transaction()
     transaction.add_input(public1, 1)
     transaction.add_output(public2, 1)
@@ -41,4 +53,4 @@ if __name__ == '__main__':
     block2 = TransactionsBlock(block1)
     block2.add_transaction(get_new_transaction())
     
-    block2.is_valid()
+    block2.detect_tampering()

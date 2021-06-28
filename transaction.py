@@ -53,6 +53,12 @@ class Transaction:
         self.signatures.append(signature)
     
     def is_valid(self):
+        """
+        - Length signatures == length required signatures
+        - Total amount to give is >= total amount received (inputs)
+        - verify signature of each party involved in the operation
+        :return:
+        """
         if len(self.signatures) != len(self.required_signatures):
             print('Not signed by all required parties')
             return False
@@ -72,14 +78,11 @@ class Transaction:
         return True
     
     def __gather(self):
+        """
+        Transaction data to be signed
+        :return: the transaction data representation
+        """
         return [self.inputs, self.outputs, self.required_signatures]
-    
-    def to_pickle(self):
-        pass
-    
-    @staticmethod
-    def from_pickle():
-        pass
 
 
 def get_4_key_pairs():
