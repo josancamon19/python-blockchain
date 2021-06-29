@@ -11,6 +11,8 @@ class Transaction:
         self.outputs = []
         self.signatures = []
         self.required_signatures = []
+        
+        self.transaction_fee = 0
     
     def add_input(self, public_address, amount):
         """
@@ -25,6 +27,7 @@ class Transaction:
         
         # Inputs are always required to sign
         self.add_required(public_address)
+        self.find_transaction_fee()
     
     def add_output(self, public_address, amount):
         """
@@ -36,6 +39,16 @@ class Transaction:
             raise NegativeAmountException()
         
         self.outputs.append((public_address, amount))
+        self.find_transaction_fee()
+    
+    def get_total_input(self):
+        return sum([amount for _, amount in self.inputs])
+    
+    def get_total_output(self):
+        return sum([amount for _, amount in self.outputs])
+    
+    def find_transaction_fee(self):
+        self.transaction_fee = self.get_total_input() - self.get_total_output()
     
     def add_required(self, public_address):
         """
@@ -55,19 +68,11 @@ class Transaction:
     def is_valid(self):
         """
         - Length signatures == length required signatures
-        - Total amount to give is >= total amount received (inputs)
         - verify signature of each party involved in the operation
         :return:
         """
         if len(self.signatures) != len(self.required_signatures):
             print('Not signed by all required parties')
-            return False
-        
-        total_input = sum([amount for _, amount in self.inputs])
-        total_output = sum([amount for _, amount in self.outputs])
-        
-        if total_input < total_output:
-            print('Not enough funds to output')
             return False
         
         for i, required in enumerate(self.required_signatures):
