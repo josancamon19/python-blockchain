@@ -1,5 +1,7 @@
+import random
 from block import Block
 from transaction import Transaction, get_4_key_pairs
+from cryptography.hazmat.primitives import hashes
 
 miner_block_reward = 25
 
@@ -70,7 +72,7 @@ def get_reward_transaction() -> Transaction:
 def get_miner_transaction(transactions_fees_to_collect: float = 0.0) -> Transaction:
     """
     :return: Simple miner transaction object
-    """
+    """  # rescue time slack integration, manage answer expectations
     transaction = Transaction()
     transaction.add_output(public4, 25 + transactions_fees_to_collect)
     return transaction
@@ -95,6 +97,8 @@ if __name__ == '__main__':
     block3.add_transaction(get_reward_transaction())
     block3.add_transaction(get_miner_transaction(.2))
     
-    print(block3.is_valid())
+    print('Block 3 valid:', block3.is_valid())
     
+    block3.find_nonce()
+    print(block3.validate_nonce())
     # block3.detect_tampering()
