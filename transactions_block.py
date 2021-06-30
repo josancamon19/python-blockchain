@@ -1,7 +1,5 @@
-import random
 from block import Block
-from transaction import Transaction, get_4_key_pairs
-from cryptography.hazmat.primitives import hashes
+from transaction import get_new_transaction, get_miner_transaction, get_reward_transaction
 
 miner_block_reward = 25
 
@@ -47,40 +45,7 @@ class TransactionsBlock(Block):
         return True
 
 
-def get_new_transaction() -> Transaction:
-    """
-    :return: Simple default transaction object
-    """
-    transaction = Transaction()
-    transaction.add_input(public1, 1)
-    transaction.add_output(public2, 1)
-    transaction.sign(private1)
-    return transaction
-
-
-def get_reward_transaction() -> Transaction:
-    """
-    :return: Simple transaction object with a fee for the miner of .1
-    """
-    transaction = Transaction()
-    transaction.add_input(public1, 1.1)
-    transaction.add_output(public2, 1)
-    transaction.sign(private1)
-    return transaction
-
-
-def get_miner_transaction(transactions_fees_to_collect: float = 0.0) -> Transaction:
-    """
-    :return: Simple miner transaction object
-    """  # rescue time slack integration, manage answer expectations
-    transaction = Transaction()
-    transaction.add_output(public4, 25 + transactions_fees_to_collect)
-    return transaction
-
-
 if __name__ == '__main__':
-    private1, public1, private2, public2, private3, public3, private4, public4 = get_4_key_pairs()
-    
     genesis = TransactionsBlock(None)
     genesis.add_transaction(get_new_transaction())
     
