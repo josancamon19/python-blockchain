@@ -1,3 +1,5 @@
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.backends import default_backend
 import signatures
 
 
@@ -88,6 +90,39 @@ class Transaction:
         :return: the transaction data representation
         """
         return [self.inputs, self.outputs, self.required_signatures]
+    
+    def setup_for_pickle(self):
+        for i, public_key in enumerate(self.inputs):
+            self.inputs[i] = self.get_key_public_bytes(public_key[0]), public_key[1]
+        
+        for i, public_key in enumerate(self.outputs):
+            self.outputs[i] = self.get_key_public_bytes(public_key[0]), public_key[1]
+        
+        for i, public_key in enumerate(self.required_signatures):
+            self.required_signatures[i] = self.get_key_public_bytes(public_key)
+    
+    def load_from_pickle(self):
+        for i, public_key in enumerate(self.inputs):
+            self.inputs[i] = self.get_key_from_public_bytes(public_key[0]), public_key[1]
+        
+        for i, public_key in enumerate(self.outputs):
+            self.outputs[i] = self.get_key_from_public_bytes(public_key[0]), public_key[1]
+        
+        for i, public_key in enumerate(self.required_signatures):
+            self.required_signatures[i] = self.get_key_from_public_bytes(public_key)
+            
+        print(self.__gather())
+    
+    @staticmethod
+    def get_key_public_bytes(key):
+        return key.public_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PublicFormat.SubjectPublicKeyInfo
+        )
+    
+    @staticmethod
+    def get_key_from_public_bytes(pem_bytes: bytes):
+        return serialization.load_pem_public_key(pem_bytes, backend=default_backend())
 
 
 def get_4_key_pairs():

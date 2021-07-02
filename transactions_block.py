@@ -43,6 +43,10 @@ class TransactionsBlock(Block):
             return False
         
         return True
+    
+    def transactions_from_pickle(self):
+        for i in range(len(self.data)):
+            self.data[i].load_from_pickle()
 
 
 if __name__ == '__main__':
